@@ -1,0 +1,87 @@
+{
+  "name": "@propeller-commerce/propeller-v2-spl",
+  "version": "0.2.0",
+  "description": "SpareParts Live (SPL) interactive spare-parts browser for the Propeller eCommerce V2 platform — a drawing tree + pan/zoom hotspot drawing + Propeller-product panel, driven by the SpareParts Live API and @propeller-commerce/propeller-sdk-v2. Framework-agnostic server helpers + a React client surface.",
+  "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsup && node scripts/copy-css.mjs",
+    "build:js": "tsup",
+    "build:css": "node scripts/copy-css.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:ci": "vitest run",
+    "test:watch": "vitest",
+    "validate": "npm run typecheck && npm run test && npm run build",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "keywords": [
+    "spareparts",
+    "spareparts-live",
+    "spl",
+    "propeller",
+    "ecommerce",
+    "react",
+    "graphql",
+    "typescript",
+    "v2"
+  ],
+  "author": "Propeller Team",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/propeller-commerce/propeller-v2-spl.git"
+  },
+  "peerDependencies": {
+    "@propeller-commerce/propeller-sdk-v2": "*",
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@panzoom/panzoom": "^4.6.0",
+    "swr": "^2.2.5"
+  },
+  "devDependencies": {
+    "@propeller-commerce/propeller-sdk-v2": "^0.13.0",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "jsdom": "^25.0.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5",
+    "vitest": "^4.1.7"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}
