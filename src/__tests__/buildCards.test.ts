@@ -44,3 +44,33 @@ describe('buildCards', () => {
     expect(cards[2]).toMatchObject({ hotspotId: 3, kind: 'not-found', name: 'Ghost part', product: null });
   });
 });
+
+describe('buildCards language', () => {
+  const radialFan = {
+    sku: '440078910',
+    priceData: { display: 'DEFAULT' },
+    names: [
+      { value: 'Radiaalventilator', language: 'NL' },
+      { value: 'Radial fan', language: 'EN' },
+      { value: 'Radiallüfter', language: 'DE' },
+    ],
+  } as unknown as Product;
+  const products = new Map<string, Product>([['440078910', radialFan]]);
+  const hotspots = [part(7, '07', '440078910', 'Radiaalventilator')];
+
+  it('names the card in the visitor language', () => {
+    expect(buildCards(hotspots, products, 'EN')[0]?.name).toBe('Radial fan');
+  });
+
+  it('matches the language case-insensitively', () => {
+    expect(buildCards(hotspots, products, 'de')[0]?.name).toBe('Radiallüfter');
+  });
+
+  it('falls back to the first name when the language has none', () => {
+    expect(buildCards(hotspots, products, 'FR')[0]?.name).toBe('Radiaalventilator');
+  });
+
+  it('keeps the first name when no language is given', () => {
+    expect(buildCards(hotspots, products)[0]?.name).toBe('Radiaalventilator');
+  });
+});

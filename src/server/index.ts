@@ -10,7 +10,7 @@ export { resolveHotspotProducts } from './products';
 export type { ResolveHotspotProductsOptions } from './products';
 
 export { assembleDrawing, assembleRoot } from './assemble';
-export type { ProductResolver } from './assemble';
+export type { ProductResolver, AssembleOptions } from './assemble';
 
 // Pure helpers + types, re-exported for convenience so a route needs one import.
 export { buildTree, findNode, breadcrumbTrail } from '../tree';

@@ -69,16 +69,26 @@ export function hotspotName(h: SplHotspot): string {
   return desc?.trim() || func?.oem || '';
 }
 
+/** The product's name in `lang`, else its first name. */
+function productName(product: Product | null, lang?: string): string {
+  const names = product?.names ?? [];
+  const match = lang ? names.find((n) => n?.language?.toUpperCase() === lang) : undefined;
+  return (match ?? names[0])?.value?.trim() ?? '';
+}
+
 /**
  * Project part hotspots into right-column cards, matching each hotspot's OEM to
  * a resolved product by SKU. Determines the `kind`:
  * product + `DEFAULT` → `default`, product + `ON_REQUEST` → `on-request`,
- * no product → `not-found`.
+ * no product → `not-found`. The card is named in `language` when the product
+ * has that name, else its first name.
  */
 export function buildCards(
   partHotspots: SplHotspot[],
-  productsBySku: Map<string, Product>
+  productsBySku: Map<string, Product>,
+  language?: string
 ): SparePartCard[] {
+  const lang = language?.toUpperCase();
   return partHotspots.map((h) => {
     const func = primaryFunc(h);
     const sku = func?.oem?.trim() ?? '';
@@ -90,7 +100,7 @@ export function buildCards(
       hotspotId: h.id,
       pos: h.pos,
       sku,
-      name: product?.names?.[0]?.value?.trim() || hotspotName(h),
+      name: productName(product, lang) || hotspotName(h),
       kind,
       product,
     };

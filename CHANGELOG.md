@@ -5,6 +5,18 @@ All notable changes to `@propeller-commerce/propeller-v2-spl` are documented her
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-11-12
+
+### Fixed
+
+- **Part cards are named in the visitor's language.** A card took the
+  product's first name, which is Dutch on most catalogs, so the English shop
+  showed "Radiaalventilator" for a part named "Radial fan" in English.
+  `assembleDrawing` and `assembleRoot` take an optional
+  `{ language }`, and `buildCards` an optional `language`; the card uses
+  the product's name in that language, else its first name as before. Pass
+  the language the products were resolved in.
+
 ## [0.2.0] - 2026-07-28
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "@propeller-commerce/propeller-v2-spl",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "SpareParts Live (SPL) interactive spare-parts browser for the Propeller eCommerce V2 platform — a drawing tree + pan/zoom hotspot drawing + Propeller-product panel, driven by the SpareParts Live API and @propeller-commerce/propeller-sdk-v2. Framework-agnostic server helpers + a React client surface.",
   "license": "MIT",
   "type": "module",

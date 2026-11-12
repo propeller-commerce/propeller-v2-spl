@@ -19,17 +19,23 @@ import { partitionHotspots, hotspotSkus, buildCards, buildNav } from '../hotspot
  */
 export type ProductResolver = (skus: string[]) => Promise<Map<string, Product>>;
 
+export interface AssembleOptions {
+  /** Visitor language; names the part cards. Without it a card takes the product's first name. */
+  language?: string;
+}
+
 export async function assembleDrawing(
   splClient: SplClient,
   drawingId: string | number,
-  resolveProducts: ProductResolver
+  resolveProducts: ProductResolver,
+  options: AssembleOptions = {}
 ): Promise<SplDrawingResult> {
   const drawingP = splClient.getDrawing(drawingId);
   const resolvedP = splClient.getHotspots(drawingId).then(async (res) => {
     const { partHotspots, navHotspots } = partitionHotspots(res.hotspots ?? []);
     const skus = hotspotSkus(partHotspots);
     const products = skus.length ? await resolveProducts(skus) : new Map<string, Product>();
-    return { cards: buildCards(partHotspots, products), nav: buildNav(navHotspots) };
+    return { cards: buildCards(partHotspots, products, options.language), nav: buildNav(navHotspots) };
   });
   const [drawing, resolved] = await Promise.all([drawingP, resolvedP]);
   return { drawing, cards: resolved.cards, nav: resolved.nav };
@@ -38,7 +44,8 @@ export async function assembleDrawing(
 export async function assembleRoot(
   splClient: SplClient,
   publicationId: string | number,
-  resolveProducts: ProductResolver
+  resolveProducts: ProductResolver,
+  options: AssembleOptions = {}
 ): Promise<SplRootResult> {
   const treeRes = await splClient.getDrawingTree(publicationId);
   const flat = treeRes.tree ?? [];
@@ -48,6 +55,6 @@ export async function assembleRoot(
     flat.find((n) => n.parent === -1)?.id ??
     flat[0]?.id;
   if (rootId == null) return { tree, drawing: '', cards: [], nav: {} };
-  const { drawing, cards, nav } = await assembleDrawing(splClient, rootId, resolveProducts);
+  const { drawing, cards, nav } = await assembleDrawing(splClient, rootId, resolveProducts, options);
   return { tree, drawing, cards, nav };
 }
